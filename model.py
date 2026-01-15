@@ -11,7 +11,15 @@ dspy.configure(lm=lm)
 corpus = "clapnq"
 
 
-class Rewriter:
+class Rewriter(dspy.Module):
     def __init__(self) -> None:
-        pass
+        self.rewrite = dspy.ChainOfThought("question -> improved_question")
 
+    def forward(self, question):
+        return self.rewrite(question)
+
+
+rewriter = Rewriter()
+
+
+print(rewriter.rewrite(question="What is Tesla?"))
